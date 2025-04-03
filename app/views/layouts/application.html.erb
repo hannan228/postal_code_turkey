@@ -1,28 +1,59 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= content_for(:title) || "Postal Code Turkey" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Primary Meta Tags -->
+  <title><%= content_for?(:title) ? yield(:title) : "Turkey Postal Codes - Find Postal Codes for All Turkish Cities" %></title>
+  <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Comprehensive database of postal codes for all cities and districts in Turkey. Search by city, district or postal code." %>">
+  <meta name="keywords" content="Turkey postal codes, Turkish posta kodu, Turkey zip codes, postal codes Turkey, posta kodu sorgulama">
 
-    <%= yield :head %>
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="<%= request.original_url %>">
+  <meta property="og:title" content="<%= content_for?(:title) ? yield(:title) : "Turkey Postal Codes - Find Postal Codes for All Turkish Cities" %>">
+  <meta property="og:description" content="<%= content_for?(:description) ? yield(:description) : "Comprehensive database of postal codes for all cities and districts in Turkey." %>">
+  <meta property="og:image" content="<%= asset_url('images.png') %>">
+ <%# TODOS turkey-postal-codes-social.png is image ko change krna h %>
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= content_for?(:title) ? yield(:title) : "Turkey Postal Codes - Find Postal Codes for All Turkish Cities" %>">
+  <meta name="twitter:description" content="<%= content_for?(:description) ? yield(:description) : "Comprehensive database of postal codes for all cities and districts in Turkey." %>">
+  <meta name="twitter:image" content="<%= asset_url('images.png') %>">
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+  <!-- Canonical URL for SEO -->
+  <link rel="canonical" href="<%= request.original_url %>" />
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
-
-  <body>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+</head>
+<body>
+  <%= render 'shared/navbar' %>
+  
+  <main class="container my-4">
+    <%# <%= render 'shared/flash' %>
     <%= yield %>
-  </body>
+  </main>
+  
+  <%= render 'shared/footer' %>
+
+  <!-- Schema.org markup for search engines -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Turkey Postal Codes",
+      "url": "<%= root_url %>",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "<%= root_path %>?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+</body>
 </html>

@@ -1,0 +1,23 @@
+// Custom variables (Turkish theme colors)
+$primary: #E30A17;  // Turkish red
+$secondary: #6c757d;
+$danger: #dc3545;
+$light: #f8f9fa;
+
+// Import Bootstrap
+@import "bootstrap";
+
+// Your custom styles
+body {
+  background-color: #f8f9fa;
+}
+
+.search-box {
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.table th {
+  background-color: $primary;
+  color: white;
+}
