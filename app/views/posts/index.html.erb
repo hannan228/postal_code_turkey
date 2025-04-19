@@ -24,3 +24,25 @@
     <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
   </div>
 </div>
+
+<div data-controller="hello">
+  <h1>Stimulus Demo</h1>
+  
+  <button 
+    data-action="click->hello#greet"
+    class="px-4 py-2 bg-blue-500 text-white rounded">
+    Click Me
+  </button>
+
+  <div data-hello-target="output" class="mt-4 p-4 border">
+    <!-- Output will appear here -->
+  </div>
+
+  <!-- Example with parameters -->
+  <button
+    data-action="click->hello#customGreet"
+    data-hello-name-param="Rails Developer"
+    class="mt-2 px-4 py-2 bg-green-500 text-white rounded">
+    Personalized Greet
+  </button>
+</div>

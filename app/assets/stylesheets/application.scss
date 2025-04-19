@@ -1,3 +1,5 @@
+@import "bootstrap";
+
 // Custom variables (Turkish theme colors)
 $primary: #E30A17;  // Turkish red
 $secondary: #6c757d;
@@ -5,7 +7,6 @@ $danger: #dc3545;
 $light: #f8f9fa;
 
 // Import Bootstrap
-@import "bootstrap";
 
 // Your custom styles
 body {

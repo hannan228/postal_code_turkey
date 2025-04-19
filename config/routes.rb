@@ -12,4 +12,50 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "posts#index"
+
+  # Routes for API
+  namespace :api do
+    namespace :v1 do
+      resources :provinces, only: [:index, :show] do
+        get :districts, on: :member
+      end
+      resources :districts, only: [] do
+        get :neighborhoods, on: :member
+      end
+      resources :postal_codes, only: [:index, :show] do
+        collection do
+          get :search
+        end
+      end
+    end
+  end
+
+  #Routes for website
+  scope "(:locale)", locale: /en|tr/ do
+    # Provinces
+    resources :provinces, only: [:index] do
+      member do
+        get :districts  # /provinces/1/districts
+      end
+      collection do
+        get :search     # /provinces/search
+      end
+    end
+  
+    # Districts
+    resources :districts, only: [] do
+      member do
+        get :neighborhoods  # /districts/1/neighborhoods
+      end
+    end
+  
+    # Postal Codes
+    resources :postal_codes, only: [:index, :show] do
+      collection do
+        get :by_location  # /postal_codes/by_location?province_id=1&district_id=2
+      end
+    end
+  end
+  
 end
+

@@ -1,0 +1,100 @@
+<%# app/views/postal_codes/index.html.erb %>
+<div class="container mt-5">
+  <div class="text-end mb-3">
+    <%= link_to "EN", url_for(locale: :en) %> | 
+    <%= link_to "TR", url_for(locale: :tr) %>
+  </div>
+  <div data-controller="hello"></div>
+<div data-controller="test"></div>
+  <%= form_with url: postal_codes_path, method: :get, data: { controller: 'postal-search' } do |f| %>
+    <div class="row g-3">
+      <!-- Province Dropdown -->
+      <div class="col-md-4" data-controller="postal-search">
+        <%= f.label :province_id, "Province", class: "form-label" %>
+        <%= select_tag :province_id,
+          options_from_collection_for_select(@provinces, :id, :name),
+          {
+            include_blank: "Select Province",
+            class: "form-select",
+            data: {
+              controller: "postal-search",
+              postal_search_target: "provinceSelect",
+              action: "change->postal-search#loadDistricts"
+            }
+          } 
+        %>
+        <%# <%= f.select :province_id, 
+          options_from_collection_for_select(@provinces, :id, :name, params[:province_id]),
+          { include_blank: "Select Province" },
+          class: "form-select",
+          data: { action: "change->postal-search#loadDistricts" } 
+        %>
+      </div>
+      <div data-postal-search-target="districtSelect">
+        <!-- Districts will be loaded here -->
+      </div>
+
+      <!-- District Dropdown (AJAX-loaded) -->
+      <div class="col-md-4">
+        <%= f.label :district_id, "District", class: "form-label" %>
+        <%= f.select :district_id, 
+              options_from_collection_for_select(@districts || [], :id, :name, params[:district_id]),
+              { include_blank: "Select District" },
+              class: "form-select",
+              disabled: params[:district_id].blank? && params[:province_id].blank?,
+              data: { action: "change->postal-search#loadNeighborhoods" } %>
+      </div>
+
+      <!-- Neighborhood Dropdown (AJAX-loaded) -->
+      <div class="col-md-4">
+        <%= f.label :neighborhood_id, "Neighborhood", class: "form-label" %>
+        <%= f.select :neighborhood_id, 
+              options_from_collection_for_select(@neighborhoods || [], :id, :name, params[:neighborhood_id]),
+              { include_blank: "Select Neighborhood" },
+              class: "form-select",
+              disabled: params[:neighborhood_id].blank? && params[:district_id].blank? %>
+      </div>
+    </div>
+
+    <%= f.submit "Search", class: "btn btn-primary mt-3" %>
+  <% end %>
+
+  <!-- Results Table -->
+  <table class="table mt-4">
+    <% if @postal_codes.any? %>
+      <thead>
+        <tr>
+          <th>Province</th>
+          <th>District</th>
+          <th>Neighborhood</th>
+          <th>Postal Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @postal_codes.each do |pc| %>
+          <tr>
+            <td><%= pc.neighborhood.district.province.name %></td>
+            <td><%= pc.neighborhood.district.name %></td>
+            <td><%= pc.neighborhood.name %></td>
+            <td><%= pc.code %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    <% else %>
+      <div class="alert alert-info">No results found. Try changing filters.</div>
+    <% end %>
+  </table>
+
+</div>
+
+<%= javascript_tag do %>
+  document.addEventListener("turbo:load", function() {
+    const select = document.querySelector('[data-controller="postal-search"]');
+    if (select) {
+      select.addEventListener("change", function(e) {
+        console.log("Fallback handler triggered");
+        // Your AJAX call here
+      });
+    }
+  });
+<% end %>

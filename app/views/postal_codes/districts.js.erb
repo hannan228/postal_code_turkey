@@ -1,0 +1,3 @@
+  document.getElementById('district_id').innerHTML = '
+    <option value="">Select District</option>
+    <%= options_from_collection_for_select(@districts, :id, :name) %>';

@@ -1,0 +1,5 @@
+tr:
+  postal_codes:
+    index:
+      province_label: "İl"
+      search_button: "Ara"

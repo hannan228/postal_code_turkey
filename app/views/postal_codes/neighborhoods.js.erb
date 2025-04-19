@@ -1,0 +1,3 @@
+document.getElementById('neighborhood_id').innerHTML = '
+  <option value="">Select Neighborhood</option>
+  <%= options_from_collection_for_select(@neighborhoods, :id, :name) %>';
