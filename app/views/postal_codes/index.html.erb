@@ -108,15 +108,3 @@
   </table>-->
 
 </div>
-
-<%= javascript_tag do %>
-  document.addEventListener("turbo:load", function() {
-    const select = document.querySelector('[data-controller="postal-search"]');
-    if (select) {
-      select.addEventListener("change", function(e) {
-        console.log("Fallback handler triggered");
-        // Your AJAX call here
-      });
-    }
-  });
-<% end %>

@@ -1,5 +1,5 @@
-document.querySelector("[data-postal-search-target='neighborhoodSelect']").innerHTML = `
+document.querySelector("[data-postal-search-target='neighborhoodSelect']").innerHTML = '
   <option value="">Select Neighborhood</option>
-  <%= options_from_collection_for_select(@neighborhoods, :id, :name) %>
-`;
+  <%= options_from_collection_for_select(@neighborhoods, :id, :name) %>';
+
 document.querySelector("[data-postal-search-target='neighborhoodSelect']").disabled = false;
