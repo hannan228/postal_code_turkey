@@ -23,17 +23,28 @@ export default class extends Controller {
   }
 
   loadNeighborhoods(event) {
-    const districtId = event.target.value
-    this.neighborhoodSelectTarget.innerHTML = '<option value="">Loading...</option>'
-    this.resetResults()
-    
+    const districtId = event.target.value;
+    if (!districtId) return;
+
+    // Show loading state
+    this.neighborhoodSelectTarget.innerHTML = '<option value="">Loading...</option>';
+    this.resetResults(); // Clear previous results
+
     fetch(`/${this.locale}/districts/${districtId}/neighborhoods.js`)
-      .then(response => response.text())
-      .then(html => {
-        this.neighborhoodSelectTarget.innerHTML = html
-        this.neighborhoodSelectTarget.disabled = false
+      .then(response => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.text();
       })
+      .then(html => {
+        this.neighborhoodSelectTarget.innerHTML = html;
+        this.neighborhoodSelectTarget.disabled = false;
+      })
+      .catch(error => {
+        console.error("Error loading neighborhoods:", error);
+        this.neighborhoodSelectTarget.innerHTML = '<option value="">Error loading neighborhoods</option>';
+      });
   }
+  
 
   resetLowerSelects() {
     this.neighborhoodSelectTarget.innerHTML = '<option value="">Select Neighborhood</option>'
