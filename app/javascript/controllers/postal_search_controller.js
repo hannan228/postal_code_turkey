@@ -2,30 +2,50 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["districtSelect", "neighborhoodSelect"]
-
-  connect() {
-    console.log("PostalSearch controller connected!"); // Test connection
-  }
+  static targets = ["districtSelect", "neighborhoodSelect", "results"]
 
   loadDistricts(event) {
-    console.log("Province changed!"); // Debug line
-    const provinceId = event.target.value;
-    if (!provinceId) return;
-
-    debugger;
-    fetch('/provinces/'+provinceId+'/districts.js')
-      .then(response => {
-        if (!response.ok) throw new Error("Network response was not ok");
-        return response.text();
-      })
+    if (!this.hasDistrictSelectTarget || !this.hasResultsTarget) {
+      console.error("Missing required targets")
+      return
+    }
+    
+    const provinceId = event.target.value
+    this.districtSelectTarget.innerHTML = '<option value="">Loading...</option>'
+    this.resetLowerSelects()
+    
+    fetch(`/${this.locale}/provinces/${provinceId}/districts.js`)
+      .then(response => response.text())
       .then(html => {
-        console.log("Received districts:", html); // Debug response
-        this.districtSelectTarget.innerHTML = html;
-        this.districtSelectTarget.disabled = false;
+        this.districtSelectTarget.innerHTML = html
+        this.districtSelectTarget.disabled = false
       })
-      .catch(error => console.error("Fetch error:", error));
   }
 
-  // ... rest of the code
+  loadNeighborhoods(event) {
+    const districtId = event.target.value
+    this.neighborhoodSelectTarget.innerHTML = '<option value="">Loading...</option>'
+    this.resetResults()
+    
+    fetch(`/${this.locale}/districts/${districtId}/neighborhoods.js`)
+      .then(response => response.text())
+      .then(html => {
+        this.neighborhoodSelectTarget.innerHTML = html
+        this.neighborhoodSelectTarget.disabled = false
+      })
+  }
+
+  resetLowerSelects() {
+    this.neighborhoodSelectTarget.innerHTML = '<option value="">Select Neighborhood</option>'
+    this.neighborhoodSelectTarget.disabled = true
+    this.resetResults()
+  }
+
+  resetResults() {
+    this.resultsTarget.innerHTML = ''
+  }
+
+  get locale() {
+    return document.documentElement.lang || 'en'
+  }
 }

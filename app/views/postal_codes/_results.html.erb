@@ -1,0 +1,20 @@
+<table class="table mt-4">
+  <thead>
+    <tr>
+      <th>Province</th>
+      <th>District</th>
+      <th>Neighborhood</th>
+      <th>Postal Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% postal_codes.each do |pc| %>
+      <tr>
+        <td><%= pc.neighborhood.district.province.name %></td>
+        <td><%= pc.neighborhood.district.name %></td>
+        <td><%= pc.neighborhood.name %></td>
+        <td><%= pc.code %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

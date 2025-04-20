@@ -2,7 +2,6 @@ class PostalCodesController < ApplicationController
 
   def index
     @provinces = Province.all
-    
     @postal_codes = if params[:neighborhood_id].present?
                       PostalCode.where(neighborhood_id: params[:neighborhood_id])
                     elsif params[:district_id].present?
